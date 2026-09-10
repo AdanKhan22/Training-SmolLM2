@@ -69,31 +69,56 @@ def train():
     dataset = load_dataset("json", data_files=args.data_file, split="train")
     formatted_dataset = dataset.map(format_prompt)
 
-    training_args = TrainingArguments(
-        output_dir=args.output_dir,
-        num_train_epochs=args.epochs,
-        per_device_train_batch_size=args.batch_size,
-        gradient_accumulation_steps=2,
-        learning_rate=args.lr,
-        logging_steps=5,
-        save_strategy="epoch",
-        fp16=(torch_dtype == torch.float16),
-        bf16=(torch_dtype == torch.bfloat16),
-        optim="adamw_torch",
-        push_to_hub=args.push_to_hub,
-        hub_model_id=args.hub_model_id,
-        report_to="none",
-    )
-
-    trainer = SFTTrainer(
-        model=model,
-        train_dataset=formatted_dataset,
-        peft_config=peft_config,
-        dataset_text_field="text",
-        max_seq_length=256,
-        tokenizer=tokenizer,
-        args=training_args,
-    )
+    # Check if modern TRL SFTConfig is supported, or fallback to standard kwargs
+    try:
+        from trl import SFTConfig
+        sft_args = SFTConfig(
+            output_dir=args.output_dir,
+            num_train_epochs=args.epochs,
+            per_device_train_batch_size=args.batch_size,
+            gradient_accumulation_steps=2,
+            learning_rate=args.lr,
+            logging_steps=5,
+            save_strategy="epoch",
+            fp16=(torch_dtype == torch.float16),
+            bf16=(torch_dtype == torch.bfloat16),
+            optim="adamw_torch",
+            push_to_hub=args.push_to_hub,
+            hub_model_id=args.hub_model_id,
+            report_to="none",
+            dataset_text_field="text",
+            max_seq_length=256,
+        )
+        trainer = SFTTrainer(
+            model=model,
+            train_dataset=formatted_dataset,
+            peft_config=peft_config,
+            processing_class=tokenizer,
+            args=sft_args,
+        )
+    except Exception:
+        # Backward compatibility for older TRL versions
+        training_args = TrainingArguments(
+            output_dir=args.output_dir,
+            num_train_epochs=args.epochs,
+            per_device_train_batch_size=args.batch_size,
+            gradient_accumulation_steps=2,
+            learning_rate=args.lr,
+            logging_steps=5,
+            save_strategy="epoch",
+            fp16=(torch_dtype == torch.float16),
+            bf16=(torch_dtype == torch.bfloat16),
+            optim="adamw_torch",
+            push_to_hub=args.push_to_hub,
+            hub_model_id=args.hub_model_id,
+            report_to="none",
+        )
+        trainer = SFTTrainer(
+            model=model,
+            train_dataset=formatted_dataset,
+            peft_config=peft_config,
+            args=training_args,
+        )
 
     print("Starting Training...")
     trainer.train()
