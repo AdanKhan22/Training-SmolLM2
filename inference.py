@@ -11,20 +11,27 @@ ADAPTER_DIR = "./shell-smollm-adapter"
 SYSTEM_PROMPT = "You are a specialized shell assistant. Provide only the exact executable bash command that accomplishes the user's request. Do not include markdown codeblocks or conversational filler unless asked."
 
 def ask_shell_assistant(query: str, model, tokenizer):
-    prompt = f"<|im_start|>system\n{SYSTEM_PROMPT}<|im_end|>\n<|im_start|>user\n{query}<|im_end|>\n<|im_start|>assistant\n"
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": query}
+    ]
+    prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
     
     with torch.no_grad():
         outputs = model.generate(
             **inputs,
-            max_new_tokens=64,
+            max_new_tokens=48,
             do_sample=False,
+            repetition_penalty=1.2,
             eos_token_id=tokenizer.eos_token_id,
             pad_token_id=tokenizer.pad_token_id
         )
     
     generated_text = tokenizer.decode(outputs[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)
-    return generated_text.strip()
+    # Return first non-empty line or stripped text
+    first_line = generated_text.strip().split("\n")[0]
+    return first_line if first_line else generated_text.strip()
 
 if __name__ == "__main__":
     print(f"Loading base model: {BASE_MODEL}")
