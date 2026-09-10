@@ -1,0 +1,30 @@
+{"instruction": "List all files including hidden ones sorted by modification time", "output": "ls -lat"}
+{"instruction": "Find all python files in the current directory modified in the last 24 hours", "output": "find . -name \"*.py\" -mtime -1"}
+{"instruction": "Check disk usage of current directory in human readable format with total sum", "output": "du -sh ."}
+{"instruction": "Show top 10 memory consuming processes", "output": "ps aux --sort=-%mem | head -n 11"}
+{"instruction": "Find and kill any process running on port 8080", "output": "kill -9 $(lsof -t -i:8080)"}
+{"instruction": "Recursively search for text 'TODO' in all js and ts files", "output": "grep -rn --include=\"*.{js,ts}\" \"TODO\" ."}
+{"instruction": "Show available free RAM in gigabytes", "output": "free -h"}
+{"instruction": "Count lines of code in all python files recursively", "output": "find . -name \"*.py\" -exec wc -l {} +"}
+{"instruction": "Download file from url and save as myapp.zip displaying progress bar", "output": "curl -L -o myapp.zip https://example.com/file.zip --progress-bar"}
+{"instruction": "Compress the folder named 'project' into a tar.gz archive", "output": "tar -czvf project.tar.gz project/"}
+{"instruction": "Extract a tar.gz archive to current directory", "output": "tar -xzvf archive.tar.gz"}
+{"instruction": "Monitor system GPU status every 1 second", "output": "watch -n 1 nvidia-smi"}
+{"instruction": "Create a new git branch named 'feature/login' and switch to it", "output": "git checkout -b feature/login"}
+{"instruction": "Discard all local uncommitted changes in git repository", "output": "git reset --hard HEAD"}
+{"instruction": "Show git log with graph and one line per commit", "output": "git log --oneline --graph --all"}
+{"instruction": "Count the number of files in the current directory", "output": "ls -1 | wc -l"}
+{"instruction": "Change permissions of script.sh to make it executable", "output": "chmod +x script.sh"}
+{"instruction": "Tail and follow logs from app.log filtering for 'ERROR'", "output": "tail -f app.log | grep --line-buffered \"ERROR\""}
+{"instruction": "Create nested directories a/b/c/d in one command", "output": "mkdir -p a/b/c/d"}
+{"instruction": "Print current public IP address", "output": "curl ifconfig.me"}
+{"instruction": "Find all empty directories under current path and delete them", "output": "find . -type d -empty -delete"}
+{"instruction": "List all active TCP listening ports and their associated process PID", "output": "sudo netstat -tulpn | grep LISTEN"}
+{"instruction": "Replace every occurrence of 'old_url' with 'new_url' across all markdown files", "output": "sed -i 's/old_url/new_url/g' *.md"}
+{"instruction": "Create a zip archive of folder ignoring node_modules and .git", "output": "zip -r project.zip project/ -x \"*/node_modules/*\" \"*/.git/*\""}
+{"instruction": "Test network latency and packet loss to 8.8.8.8 with 5 pings", "output": "ping -c 5 8.8.8.8"}
+{"instruction": "Show last 20 commands executed in history", "output": "history | tail -n 20"}
+{"instruction": "Run a script in background that stays alive after terminal closes", "output": "nohup python script.py > output.log 2>&1 &"}
+{"instruction": "Inspect live system resource utilization with top or htop", "output": "htop"}
+{"instruction": "Check the status of the docker daemon service", "output": "systemctl status docker"}
+{"instruction": "Remove all stopped docker containers, unused networks, and dangling images", "output": "docker system prune -f"}
