@@ -1,30 +1,135 @@
 {"instruction": "List all files including hidden ones sorted by modification time", "output": "ls -lat"}
-{"instruction": "Find all python files in the current directory modified in the last 24 hours", "output": "find . -name \"*.py\" -mtime -1"}
-{"instruction": "Check disk usage of current directory in human readable format with total sum", "output": "du -sh ."}
+{"instruction": "Find all python files in the current directory modified in the last 24 hours", "output": "find . -name '*.py' -mtime -1"}
+{"instruction": "Check disk usage of current directory in human readable format", "output": "du -sh ."}
 {"instruction": "Show top 10 memory consuming processes", "output": "ps aux --sort=-%mem | head -n 11"}
 {"instruction": "Find and kill any process running on port 8080", "output": "kill -9 $(lsof -t -i:8080)"}
-{"instruction": "Recursively search for text 'TODO' in all js and ts files", "output": "grep -rn --include=\"*.{js,ts}\" \"TODO\" ."}
+{"instruction": "Recursively search for text TODO in all js and ts files", "output": "grep -rn --include='*.js' --include='*.ts' 'TODO' ."}
 {"instruction": "Show available free RAM in gigabytes", "output": "free -h"}
-{"instruction": "Count lines of code in all python files recursively", "output": "find . -name \"*.py\" -exec wc -l {} +"}
-{"instruction": "Download file from url and save as myapp.zip displaying progress bar", "output": "curl -L -o myapp.zip https://example.com/file.zip --progress-bar"}
-{"instruction": "Compress the folder named 'project' into a tar.gz archive", "output": "tar -czvf project.tar.gz project/"}
+{"instruction": "Count lines of code in all python files recursively", "output": "find . -name '*.py' -exec wc -l {} +"}
+{"instruction": "Download file from url and save as myapp.zip", "output": "curl -L -o myapp.zip https://example.com/file.zip"}
+{"instruction": "Compress the folder named project into a tar.gz archive", "output": "tar -czvf project.tar.gz project/"}
 {"instruction": "Extract a tar.gz archive to current directory", "output": "tar -xzvf archive.tar.gz"}
-{"instruction": "Monitor system GPU status every 1 second", "output": "watch -n 1 nvidia-smi"}
-{"instruction": "Create a new git branch named 'feature/login' and switch to it", "output": "git checkout -b feature/login"}
-{"instruction": "Discard all local uncommitted changes in git repository", "output": "git reset --hard HEAD"}
+{"instruction": "Monitor GPU status every 1 second", "output": "watch -n 1 nvidia-smi"}
+{"instruction": "Create a new git branch named feature/login and switch to it", "output": "git checkout -b feature/login"}
+{"instruction": "Discard all local uncommitted changes in git", "output": "git checkout -- ."}
 {"instruction": "Show git log with graph and one line per commit", "output": "git log --oneline --graph --all"}
 {"instruction": "Count the number of files in the current directory", "output": "ls -1 | wc -l"}
-{"instruction": "Change permissions of script.sh to make it executable", "output": "chmod +x script.sh"}
-{"instruction": "Tail and follow logs from app.log filtering for 'ERROR'", "output": "tail -f app.log | grep --line-buffered \"ERROR\""}
+{"instruction": "Make script.sh executable", "output": "chmod +x script.sh"}
+{"instruction": "Tail and follow logs from app.log filtering for ERROR", "output": "tail -f app.log | grep 'ERROR'"}
 {"instruction": "Create nested directories a/b/c/d in one command", "output": "mkdir -p a/b/c/d"}
-{"instruction": "Print current public IP address", "output": "curl ifconfig.me"}
-{"instruction": "Find all empty directories under current path and delete them", "output": "find . -type d -empty -delete"}
-{"instruction": "List all active TCP listening ports and their associated process PID", "output": "sudo netstat -tulpn | grep LISTEN"}
-{"instruction": "Replace every occurrence of 'old_url' with 'new_url' across all markdown files", "output": "sed -i 's/old_url/new_url/g' *.md"}
-{"instruction": "Create a zip archive of folder ignoring node_modules and .git", "output": "zip -r project.zip project/ -x \"*/node_modules/*\" \"*/.git/*\""}
-{"instruction": "Test network latency and packet loss to 8.8.8.8 with 5 pings", "output": "ping -c 5 8.8.8.8"}
-{"instruction": "Show last 20 commands executed in history", "output": "history | tail -n 20"}
-{"instruction": "Run a script in background that stays alive after terminal closes", "output": "nohup python script.py > output.log 2>&1 &"}
-{"instruction": "Inspect live system resource utilization with top or htop", "output": "htop"}
-{"instruction": "Check the status of the docker daemon service", "output": "systemctl status docker"}
-{"instruction": "Remove all stopped docker containers, unused networks, and dangling images", "output": "docker system prune -f"}
+{"instruction": "Print current public IP address", "output": "curl -s ifconfig.me"}
+{"instruction": "Find all empty directories and delete them", "output": "find . -type d -empty -delete"}
+{"instruction": "List all active TCP listening ports", "output": "ss -tlnp"}
+{"instruction": "Replace every occurrence of old_url with new_url in all markdown files", "output": "sed -i 's/old_url/new_url/g' *.md"}
+{"instruction": "Create a zip archive of folder ignoring node_modules", "output": "zip -r project.zip project/ -x '*/node_modules/*'"}
+{"instruction": "Ping google dns 5 times", "output": "ping -c 5 8.8.8.8"}
+{"instruction": "Show last 20 commands from history", "output": "history | tail -n 20"}
+{"instruction": "Run a python script in the background that persists after logout", "output": "nohup python script.py > output.log 2>&1 &"}
+{"instruction": "Check docker daemon status", "output": "systemctl status docker"}
+{"instruction": "Remove all stopped docker containers and dangling images", "output": "docker system prune -f"}
+{"instruction": "Show all running docker containers", "output": "docker ps"}
+{"instruction": "Stop all running docker containers", "output": "docker stop $(docker ps -q)"}
+{"instruction": "Show docker container logs for container named web", "output": "docker logs web"}
+{"instruction": "List all docker images", "output": "docker images"}
+{"instruction": "Remove a docker image by name", "output": "docker rmi image_name"}
+{"instruction": "Run a docker container in detached mode mapping port 80 to 8080", "output": "docker run -d -p 8080:80 image_name"}
+{"instruction": "Show disk space usage for all mounted filesystems", "output": "df -h"}
+{"instruction": "Find files larger than 100MB in current directory", "output": "find . -size +100M -type f"}
+{"instruction": "Show the current date and time", "output": "date"}
+{"instruction": "Display the current username", "output": "whoami"}
+{"instruction": "Show system uptime", "output": "uptime"}
+{"instruction": "Display kernel version", "output": "uname -r"}
+{"instruction": "Show all environment variables", "output": "env"}
+{"instruction": "Set an environment variable called API_KEY", "output": "export API_KEY='your_key_here'"}
+{"instruction": "Show the PATH environment variable", "output": "echo $PATH"}
+{"instruction": "Find which process is using the most CPU", "output": "ps aux --sort=-%cpu | head -5"}
+{"instruction": "Kill a process by name", "output": "pkill process_name"}
+{"instruction": "Kill process with PID 1234", "output": "kill -9 1234"}
+{"instruction": "List all cron jobs for current user", "output": "crontab -l"}
+{"instruction": "Edit the crontab for current user", "output": "crontab -e"}
+{"instruction": "SSH into a remote server", "output": "ssh user@hostname"}
+{"instruction": "Copy a file to a remote server using scp", "output": "scp file.txt user@hostname:/path/to/destination/"}
+{"instruction": "Copy a directory recursively to a remote server", "output": "scp -r local_dir/ user@hostname:/remote/path/"}
+{"instruction": "Sync a local directory with a remote one using rsync", "output": "rsync -avz local_dir/ user@hostname:/remote/path/"}
+{"instruction": "Show open network connections", "output": "netstat -an"}
+{"instruction": "Check if a host is reachable", "output": "ping -c 3 hostname"}
+{"instruction": "Look up DNS records for a domain", "output": "dig example.com"}
+{"instruction": "Download a file from the internet with wget", "output": "wget https://example.com/file.tar.gz"}
+{"instruction": "Show the first 20 lines of a file", "output": "head -n 20 file.txt"}
+{"instruction": "Show the last 50 lines of a file", "output": "tail -n 50 file.txt"}
+{"instruction": "Count the number of lines in a file", "output": "wc -l file.txt"}
+{"instruction": "Search for a string in a file", "output": "grep 'search_term' file.txt"}
+{"instruction": "Search for a string recursively in all files", "output": "grep -r 'search_term' ."}
+{"instruction": "Find a file by name anywhere on the system", "output": "find / -name 'filename' 2>/dev/null"}
+{"instruction": "Sort a file alphabetically", "output": "sort file.txt"}
+{"instruction": "Remove duplicate lines from a sorted file", "output": "sort file.txt | uniq"}
+{"instruction": "Compare two files and show differences", "output": "diff file1.txt file2.txt"}
+{"instruction": "Show file permissions in octal format", "output": "stat -c '%a' file.txt"}
+{"instruction": "Change owner of a file to user john", "output": "chown john file.txt"}
+{"instruction": "Change permissions of a file to read write execute for owner only", "output": "chmod 700 file.txt"}
+{"instruction": "Create a symbolic link", "output": "ln -s /path/to/target /path/to/link"}
+{"instruction": "Show the size of a file in human readable format", "output": "ls -lh file.txt"}
+{"instruction": "Rename a file", "output": "mv old_name.txt new_name.txt"}
+{"instruction": "Copy a file to another directory", "output": "cp file.txt /destination/path/"}
+{"instruction": "Delete a file", "output": "rm file.txt"}
+{"instruction": "Delete a directory and all its contents", "output": "rm -rf directory_name/"}
+{"instruction": "Create an empty file", "output": "touch newfile.txt"}
+{"instruction": "Show current working directory", "output": "pwd"}
+{"instruction": "List all installed pip packages", "output": "pip list"}
+{"instruction": "Install a python package with pip", "output": "pip install package_name"}
+{"instruction": "Create a python virtual environment", "output": "python -m venv myenv"}
+{"instruction": "Activate a python virtual environment on linux", "output": "source myenv/bin/activate"}
+{"instruction": "Freeze pip requirements to a file", "output": "pip freeze > requirements.txt"}
+{"instruction": "Install packages from requirements.txt", "output": "pip install -r requirements.txt"}
+{"instruction": "Run a python http server on port 8000", "output": "python -m http.server 8000"}
+{"instruction": "Show git status of current repository", "output": "git status"}
+{"instruction": "Stage all changes in git", "output": "git add ."}
+{"instruction": "Commit staged changes with a message", "output": "git commit -m 'your commit message'"}
+{"instruction": "Push commits to remote main branch", "output": "git push origin main"}
+{"instruction": "Pull latest changes from remote", "output": "git pull origin main"}
+{"instruction": "Show all git branches", "output": "git branch -a"}
+{"instruction": "Delete a git branch locally", "output": "git branch -d branch_name"}
+{"instruction": "Merge a branch into current branch", "output": "git merge branch_name"}
+{"instruction": "Stash current changes in git", "output": "git stash"}
+{"instruction": "Apply the most recent git stash", "output": "git stash pop"}
+{"instruction": "Show git diff of unstaged changes", "output": "git diff"}
+{"instruction": "Undo the last git commit but keep changes", "output": "git reset --soft HEAD~1"}
+{"instruction": "Clone a git repository", "output": "git clone https://github.com/user/repo.git"}
+{"instruction": "Show all listening ports and which process owns them", "output": "sudo lsof -i -P -n | grep LISTEN"}
+{"instruction": "Check available disk space on root partition", "output": "df -h /"}
+{"instruction": "Monitor system resources interactively", "output": "htop"}
+{"instruction": "Show CPU information", "output": "lscpu"}
+{"instruction": "Show memory information", "output": "cat /proc/meminfo"}
+{"instruction": "Restart a systemd service", "output": "sudo systemctl restart service_name"}
+{"instruction": "Enable a service to start on boot", "output": "sudo systemctl enable service_name"}
+{"instruction": "Check logs for a systemd service", "output": "journalctl -u service_name -f"}
+{"instruction": "Show system logs from today", "output": "journalctl --since today"}
+{"instruction": "Add a user to the system", "output": "sudo useradd -m username"}
+{"instruction": "Change password for a user", "output": "sudo passwd username"}
+{"instruction": "Switch to root user", "output": "sudo su -"}
+{"instruction": "Find which package provides a command", "output": "which command_name"}
+{"instruction": "Update all system packages on ubuntu", "output": "sudo apt update && sudo apt upgrade -y"}
+{"instruction": "Install a package on ubuntu", "output": "sudo apt install package_name"}
+{"instruction": "Uninstall a package on ubuntu", "output": "sudo apt remove package_name"}
+{"instruction": "Search for available packages on ubuntu", "output": "apt search package_name"}
+{"instruction": "Show contents of a file with line numbers", "output": "cat -n file.txt"}
+{"instruction": "Write text to a new file", "output": "echo 'hello world' > file.txt"}
+{"instruction": "Append text to an existing file", "output": "echo 'new line' >> file.txt"}
+{"instruction": "Convert all tabs to spaces in a file", "output": "expand -t 4 file.txt > output.txt"}
+{"instruction": "Print only the second column from a space-delimited file", "output": "awk '{print $2}' file.txt"}
+{"instruction": "Display a file paginated so you can scroll", "output": "less file.txt"}
+{"instruction": "Redirect both stdout and stderr to a file", "output": "command > output.log 2>&1"}
+{"instruction": "Run a command and time how long it takes", "output": "time command_name"}
+{"instruction": "Check the exit code of the last command", "output": "echo $?"}
+{"instruction": "Run two commands sequentially only if the first succeeds", "output": "command1 && command2"}
+{"instruction": "Run a command in a loop 10 times", "output": "for i in $(seq 1 10); do echo $i; done"}
+{"instruction": "Watch a command output refresh every 2 seconds", "output": "watch -n 2 'command'"}
+{"instruction": "Generate a random password of 16 characters", "output": "openssl rand -base64 16"}
+{"instruction": "Calculate md5 checksum of a file", "output": "md5sum file.txt"}
+{"instruction": "Calculate sha256 checksum of a file", "output": "sha256sum file.txt"}
+{"instruction": "Base64 encode a string", "output": "echo -n 'hello' | base64"}
+{"instruction": "Base64 decode a string", "output": "echo 'aGVsbG8=' | base64 -d"}
+{"instruction": "Show calendar for the current month", "output": "cal"}
+{"instruction": "Convert a json file to pretty printed format", "output": "cat file.json | python -m json.tool"}
+{"instruction": "Find all log files modified in the past 2 days", "output": "find . -name '*.log' -mtime -2"}
+{"instruction": "Check how much disk space is left on root drive", "output": "df -h /"}

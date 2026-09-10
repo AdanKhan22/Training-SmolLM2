@@ -71,10 +71,15 @@ def train():
     dataset = load_dataset("json", data_files=args.data_file, split="train")
     formatted_dataset = dataset.map(lambda ex: format_prompt(ex, tokenizer))
 
-    # Response template for SmolLM ChatML format: <|im_start|>assistant\n
-    response_template = "<|im_start|>assistant\n"
-    from trl import DataCollatorForCompletionOnlyLM
-    collator = DataCollatorForCompletionOnlyLM(response_template=response_template, tokenizer=tokenizer)
+    # Try to set up completion-only collator (trains only on assistant output)
+    collator = None
+    try:
+        from trl import DataCollatorForCompletionOnlyLM
+        response_template = "<|im_start|>assistant\n"
+        collator = DataCollatorForCompletionOnlyLM(response_template=response_template, tokenizer=tokenizer)
+        print("Using DataCollatorForCompletionOnlyLM (loss on assistant tokens only)")
+    except ImportError:
+        print("DataCollatorForCompletionOnlyLM not available in this TRL version, training on full sequence")
 
     # SFTConfig configuration for modern TRL
     try:
@@ -96,17 +101,18 @@ def train():
             dataset_text_field="text",
             max_length=256,
         )
-        trainer = SFTTrainer(
+        trainer_kwargs = dict(
             model=model,
             train_dataset=formatted_dataset,
             peft_config=peft_config,
-            data_collator=collator,
             processing_class=tokenizer,
             args=sft_args,
         )
+        if collator:
+            trainer_kwargs["data_collator"] = collator
+        trainer = SFTTrainer(**trainer_kwargs)
     except Exception as err:
         print(f"Fallback to TrainingArguments due to: {err}")
-        # Backward compatibility for older TRL versions
         training_args = TrainingArguments(
             output_dir=args.output_dir,
             num_train_epochs=args.epochs,
@@ -122,13 +128,15 @@ def train():
             hub_model_id=args.hub_model_id,
             report_to="none",
         )
-        trainer = SFTTrainer(
+        trainer_kwargs = dict(
             model=model,
             train_dataset=formatted_dataset,
             peft_config=peft_config,
-            data_collator=collator,
             args=training_args,
         )
+        if collator:
+            trainer_kwargs["data_collator"] = collator
+        trainer = SFTTrainer(**trainer_kwargs)
 
     print("Starting Training...")
     trainer.train()
