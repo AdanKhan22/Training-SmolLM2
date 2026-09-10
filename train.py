@@ -69,7 +69,7 @@ def train():
     dataset = load_dataset("json", data_files=args.data_file, split="train")
     formatted_dataset = dataset.map(format_prompt)
 
-    # Check if modern TRL SFTConfig is supported, or fallback to standard kwargs
+    # SFTConfig configuration for modern TRL
     try:
         from trl import SFTConfig
         sft_args = SFTConfig(
@@ -87,7 +87,7 @@ def train():
             hub_model_id=args.hub_model_id,
             report_to="none",
             dataset_text_field="text",
-            max_seq_length=256,
+            max_length=256,
         )
         trainer = SFTTrainer(
             model=model,
@@ -96,7 +96,8 @@ def train():
             processing_class=tokenizer,
             args=sft_args,
         )
-    except Exception:
+    except Exception as err:
+        print(f"Fallback to TrainingArguments due to: {err}")
         # Backward compatibility for older TRL versions
         training_args = TrainingArguments(
             output_dir=args.output_dir,
