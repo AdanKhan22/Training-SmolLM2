@@ -71,6 +71,11 @@ def train():
     dataset = load_dataset("json", data_files=args.data_file, split="train")
     formatted_dataset = dataset.map(lambda ex: format_prompt(ex, tokenizer))
 
+    # Response template for SmolLM ChatML format: <|im_start|>assistant\n
+    response_template = "<|im_start|>assistant\n"
+    from trl import DataCollatorForCompletionOnlyLM
+    collator = DataCollatorForCompletionOnlyLM(response_template=response_template, tokenizer=tokenizer)
+
     # SFTConfig configuration for modern TRL
     try:
         from trl import SFTConfig
@@ -95,6 +100,7 @@ def train():
             model=model,
             train_dataset=formatted_dataset,
             peft_config=peft_config,
+            data_collator=collator,
             processing_class=tokenizer,
             args=sft_args,
         )
@@ -120,6 +126,7 @@ def train():
             model=model,
             train_dataset=formatted_dataset,
             peft_config=peft_config,
+            data_collator=collator,
             args=training_args,
         )
 
