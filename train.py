@@ -19,12 +19,14 @@ from trl import SFTTrainer
 DEFAULT_MODEL = "HuggingFaceTB/SmolLM2-135M-Instruct"
 SYSTEM_PROMPT = "You are a specialized shell assistant. Provide only the exact executable bash command that accomplishes the user's request. Do not include markdown codeblocks or conversational filler unless asked."
 
-def format_prompt(example):
-    """Format prompt into ChatML / SmolLM format."""
-    instruction = example["instruction"]
-    output = example["output"]
-    
-    text = f"<|im_start|>system\n{SYSTEM_PROMPT}<|im_end|>\n<|im_start|>user\n{instruction}<|im_end|>\n<|im_start|>assistant\n{output}<|im_end|>"
+def format_prompt(example, tokenizer):
+    """Format prompt into SmolLM's official ChatML format using tokenizer."""
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": example["instruction"]},
+        {"role": "assistant", "content": example["output"]}
+    ]
+    text = tokenizer.apply_chat_template(messages, tokenize=False)
     return {"text": text}
 
 def train():
@@ -67,7 +69,7 @@ def train():
 
     print("Loading dataset...")
     dataset = load_dataset("json", data_files=args.data_file, split="train")
-    formatted_dataset = dataset.map(format_prompt)
+    formatted_dataset = dataset.map(lambda ex: format_prompt(ex, tokenizer))
 
     # SFTConfig configuration for modern TRL
     try:
