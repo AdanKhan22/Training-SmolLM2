@@ -46,11 +46,31 @@ if __name__ == "__main__":
     model = PeftModel.from_pretrained(base_model, ADAPTER_DIR)
     model.eval()
 
+    # === OUT-OF-SCOPE TESTS (none of these are in the training data) ===
     test_queries = [
-        "Show all running docker containers",
-        "Find all log files modified in the past 2 days",
-        "Check how much disk space is left on root drive",
-        "Kill process with PID 1234"
+        # Kubernetes (never in dataset)
+        "List all pods in the default namespace",
+        "Scale a deployment named web-app to 5 replicas",
+        # Networking / diagnostics (novel combos)
+        "Show which process is listening on port 3000",
+        "Trace the network route to google.com",
+        # Awk / sed pipelines (never trained on these combos)
+        "Print the 3rd column of a CSV file",
+        "Replace all spaces with underscores in filenames in current dir",
+        # Cron / scheduling (not in dataset)
+        "Schedule a script to run every day at 3am",
+        # Database (totally out of scope)
+        "Dump a postgres database named mydb to a file",
+        "Connect to a mysql database on localhost",
+        # System admin (novel)
+        "Show the top 5 largest files on the entire system",
+        "Check which linux distro and version is installed",
+        # Creative / multi-step
+        "Count how many times the word error appears in all log files",
+        "Zip all jpg files in current directory into photos.zip",
+        # Totally novel
+        "Convert a video file from mp4 to gif",
+        "List all USB devices connected to the machine",
     ]
 
     print("\n--- Model Inference Tests ---")
